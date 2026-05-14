@@ -1,0 +1,207 @@
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccMnupdE.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"gpio.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/gpio.c"
+  20              		.section	.text.MX_GPIO_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	MX_GPIO_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	MX_GPIO_Init:
+  28              	.LFB413:
+   1:Core/Src/gpio.c **** /* USER CODE BEGIN Header */
+   2:Core/Src/gpio.c **** /**
+   3:Core/Src/gpio.c ****   ******************************************************************************
+   4:Core/Src/gpio.c ****   * @file    gpio.c
+   5:Core/Src/gpio.c ****   * @brief   This file provides code for the configuration
+   6:Core/Src/gpio.c ****   *          of all used GPIO pins.
+   7:Core/Src/gpio.c ****   ******************************************************************************
+   8:Core/Src/gpio.c ****   * @attention
+   9:Core/Src/gpio.c ****   *
+  10:Core/Src/gpio.c ****   * Copyright (c) 2026 STMicroelectronics.
+  11:Core/Src/gpio.c ****   * All rights reserved.
+  12:Core/Src/gpio.c ****   *
+  13:Core/Src/gpio.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  14:Core/Src/gpio.c ****   * in the root directory of this software component.
+  15:Core/Src/gpio.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:Core/Src/gpio.c ****   *
+  17:Core/Src/gpio.c ****   ******************************************************************************
+  18:Core/Src/gpio.c ****   */
+  19:Core/Src/gpio.c **** /* USER CODE END Header */
+  20:Core/Src/gpio.c **** 
+  21:Core/Src/gpio.c **** /* Includes ------------------------------------------------------------------*/
+  22:Core/Src/gpio.c **** #include "gpio.h"
+  23:Core/Src/gpio.c **** 
+  24:Core/Src/gpio.c **** /* USER CODE BEGIN 0 */
+  25:Core/Src/gpio.c **** 
+  26:Core/Src/gpio.c **** /* USER CODE END 0 */
+  27:Core/Src/gpio.c **** 
+  28:Core/Src/gpio.c **** /*----------------------------------------------------------------------------*/
+  29:Core/Src/gpio.c **** /* Configure GPIO                                                             */
+  30:Core/Src/gpio.c **** /*----------------------------------------------------------------------------*/
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccMnupdE.s 			page 2
+
+
+  31:Core/Src/gpio.c **** /* USER CODE BEGIN 1 */
+  32:Core/Src/gpio.c **** 
+  33:Core/Src/gpio.c **** /* USER CODE END 1 */
+  34:Core/Src/gpio.c **** 
+  35:Core/Src/gpio.c **** /** Configure pins
+  36:Core/Src/gpio.c **** */
+  37:Core/Src/gpio.c **** void MX_GPIO_Init(void)
+  38:Core/Src/gpio.c **** {
+  29              		.loc 1 38 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 32
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 70B5     		push	{r4, r5, r6, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 4, -16
+  37              		.cfi_offset 5, -12
+  38              		.cfi_offset 6, -8
+  39              		.cfi_offset 14, -4
+  40 0002 88B0     		sub	sp, sp, #32
+  41              	.LCFI1:
+  42              		.cfi_def_cfa_offset 48
+  39:Core/Src/gpio.c **** 
+  40:Core/Src/gpio.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
+  43              		.loc 1 40 3 view .LVU1
+  44              		.loc 1 40 20 is_stmt 0 view .LVU2
+  45 0004 03AD     		add	r5, sp, #12
+  46 0006 0024     		movs	r4, #0
+  47 0008 0394     		str	r4, [sp, #12]
+  48 000a 0494     		str	r4, [sp, #16]
+  49 000c 0594     		str	r4, [sp, #20]
+  50 000e 0694     		str	r4, [sp, #24]
+  51 0010 0794     		str	r4, [sp, #28]
+  41:Core/Src/gpio.c **** 
+  42:Core/Src/gpio.c ****   /* GPIO Ports Clock Enable */
+  43:Core/Src/gpio.c ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+  52              		.loc 1 43 3 is_stmt 1 view .LVU3
+  53              	.LBB2:
+  54              		.loc 1 43 3 view .LVU4
+  55              		.loc 1 43 3 view .LVU5
+  56 0012 124B     		ldr	r3, .L3
+  57 0014 DA6C     		ldr	r2, [r3, #76]
+  58 0016 42F00102 		orr	r2, r2, #1
+  59 001a DA64     		str	r2, [r3, #76]
+  60              		.loc 1 43 3 view .LVU6
+  61 001c DA6C     		ldr	r2, [r3, #76]
+  62 001e 02F00102 		and	r2, r2, #1
+  63 0022 0192     		str	r2, [sp, #4]
+  64              		.loc 1 43 3 view .LVU7
+  65 0024 019A     		ldr	r2, [sp, #4]
+  66              	.LBE2:
+  67              		.loc 1 43 3 view .LVU8
+  44:Core/Src/gpio.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+  68              		.loc 1 44 3 view .LVU9
+  69              	.LBB3:
+  70              		.loc 1 44 3 view .LVU10
+  71              		.loc 1 44 3 view .LVU11
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccMnupdE.s 			page 3
+
+
+  72 0026 DA6C     		ldr	r2, [r3, #76]
+  73 0028 42F00202 		orr	r2, r2, #2
+  74 002c DA64     		str	r2, [r3, #76]
+  75              		.loc 1 44 3 view .LVU12
+  76 002e DB6C     		ldr	r3, [r3, #76]
+  77 0030 03F00203 		and	r3, r3, #2
+  78 0034 0293     		str	r3, [sp, #8]
+  79              		.loc 1 44 3 view .LVU13
+  80 0036 029B     		ldr	r3, [sp, #8]
+  81              	.LBE3:
+  82              		.loc 1 44 3 view .LVU14
+  45:Core/Src/gpio.c **** 
+  46:Core/Src/gpio.c ****   /*Configure GPIO pin Output Level */
+  47:Core/Src/gpio.c ****   HAL_GPIO_WritePin(MCP3208_CS_GPIO_Port, MCP3208_CS_Pin, GPIO_PIN_SET);
+  83              		.loc 1 47 3 view .LVU15
+  84 0038 094E     		ldr	r6, .L3+4
+  85 003a 0122     		movs	r2, #1
+  86 003c 4021     		movs	r1, #64
+  87 003e 3046     		mov	r0, r6
+  88 0040 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  89              	.LVL0:
+  48:Core/Src/gpio.c **** 
+  49:Core/Src/gpio.c ****   /*Configure GPIO pin : PtPin */
+  50:Core/Src/gpio.c ****   GPIO_InitStruct.Pin = MCP3208_CS_Pin;
+  90              		.loc 1 50 3 view .LVU16
+  91              		.loc 1 50 23 is_stmt 0 view .LVU17
+  92 0044 4023     		movs	r3, #64
+  93 0046 0393     		str	r3, [sp, #12]
+  51:Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  94              		.loc 1 51 3 is_stmt 1 view .LVU18
+  95              		.loc 1 51 24 is_stmt 0 view .LVU19
+  96 0048 0123     		movs	r3, #1
+  97 004a 0493     		str	r3, [sp, #16]
+  52:Core/Src/gpio.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  98              		.loc 1 52 3 is_stmt 1 view .LVU20
+  99              		.loc 1 52 24 is_stmt 0 view .LVU21
+ 100 004c 0594     		str	r4, [sp, #20]
+  53:Core/Src/gpio.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 101              		.loc 1 53 3 is_stmt 1 view .LVU22
+ 102              		.loc 1 53 25 is_stmt 0 view .LVU23
+ 103 004e 0694     		str	r4, [sp, #24]
+  54:Core/Src/gpio.c ****   HAL_GPIO_Init(MCP3208_CS_GPIO_Port, &GPIO_InitStruct);
+ 104              		.loc 1 54 3 is_stmt 1 view .LVU24
+ 105 0050 2946     		mov	r1, r5
+ 106 0052 3046     		mov	r0, r6
+ 107 0054 FFF7FEFF 		bl	HAL_GPIO_Init
+ 108              	.LVL1:
+  55:Core/Src/gpio.c **** 
+  56:Core/Src/gpio.c **** }
+ 109              		.loc 1 56 1 is_stmt 0 view .LVU25
+ 110 0058 08B0     		add	sp, sp, #32
+ 111              	.LCFI2:
+ 112              		.cfi_def_cfa_offset 16
+ 113              		@ sp needed
+ 114 005a 70BD     		pop	{r4, r5, r6, pc}
+ 115              	.L4:
+ 116              		.align	2
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccMnupdE.s 			page 4
+
+
+ 117              	.L3:
+ 118 005c 00100240 		.word	1073876992
+ 119 0060 00040048 		.word	1207960576
+ 120              		.cfi_endproc
+ 121              	.LFE413:
+ 123              		.text
+ 124              	.Letext0:
+ 125              		.file 2 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.2 rel1/arm-none-eabi/include/ma
+ 126              		.file 3 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.2 rel1/arm-none-eabi/include/sy
+ 127              		.file 4 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l476xx.h"
+ 128              		.file 5 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.h"
+ 129              		.file 6 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_dma.h"
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccMnupdE.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 gpio.c
+C:\Users\ChipTec\AppData\Local\Temp\ccMnupdE.s:21     .text.MX_GPIO_Init:00000000 $t
+C:\Users\ChipTec\AppData\Local\Temp\ccMnupdE.s:27     .text.MX_GPIO_Init:00000000 MX_GPIO_Init
+C:\Users\ChipTec\AppData\Local\Temp\ccMnupdE.s:118    .text.MX_GPIO_Init:0000005c $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_GPIO_Init

@@ -1,0 +1,48 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build (make all)",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "all"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Baut das Projekt mit GNU Make und dem Standardziel 'all'."
+        },
+        {
+            "label": "Clean (make clean)",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "clean"
+            ],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Bereinigt das Projektverzeichnis (löscht Build-Artefakte)."
+        },
+        {
+            "label": "Flash (OpenOCD)",
+            "type": "shell",
+            "command": "openocd",
+            "args": [
+                "-f", "interface/stlink.cfg",
+                "-f", "target/stm32l4x.cfg",
+                "-c", "program build/EXP02_MCP3208.elf verify reset exit"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [],
+            "detail": "Flasht das Projekt mit OpenOCD auf den STM32."
+        }
+    ]
+}

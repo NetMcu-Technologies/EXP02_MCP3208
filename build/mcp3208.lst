@@ -1,0 +1,638 @@
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"mcp3208.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/mcp3208.c"
+  20              		.section	.text.MCP3208_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	MCP3208_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	MCP3208_Init:
+  28              	.LFB416:
+   1:Core/Src/mcp3208.c **** /* =============================================================================
+   2:Core/Src/mcp3208.c ****  * mcp3208.c  —  Treiber-Implementierung für den MCP3208 12-Bit ADC
+   3:Core/Src/mcp3208.c ****  * =============================================================================
+   4:Core/Src/mcp3208.c ****  *
+   5:Core/Src/mcp3208.c ****  * DIESES FILE IST KOMPLETT USER-CODE (NICHT VON CUBEMX GENERIERT).
+   6:Core/Src/mcp3208.c ****  *
+   7:Core/Src/mcp3208.c ****  * Alle Funktionen kommunizieren über SPI1 (hspi1, initialisiert von CubeMX).
+   8:Core/Src/mcp3208.c ****  * Die CS-Leitung (PB6) wird manuell (Software-NSS) gesteuert.
+   9:Core/Src/mcp3208.c ****  * =========================================================================== */
+  10:Core/Src/mcp3208.c **** 
+  11:Core/Src/mcp3208.c **** #include "mcp3208.h"
+  12:Core/Src/mcp3208.c **** #include "spi.h"    /* hspi1-Handle (von CubeMX generiert, in spi.c definiert) */
+  13:Core/Src/mcp3208.c **** #include <stdio.h>
+  14:Core/Src/mcp3208.c **** /* ===========================================================================
+  15:Core/Src/mcp3208.c ****  * MCP3208_Init
+  16:Core/Src/mcp3208.c ****  * ===========================================================================
+  17:Core/Src/mcp3208.c ****  * Stellt sicher, dass der CS-Pin nach dem Reset HIGH ist (MCP3208 inaktiv).
+  18:Core/Src/mcp3208.c ****  * Diese Funktion muss NACH MX_GPIO_Init() und NACH MX_SPI1_Init() aufgerufen
+  19:Core/Src/mcp3208.c ****  * werden, da der GPIO erst nach MX_GPIO_Init() konfiguriert ist.
+  20:Core/Src/mcp3208.c ****  * =========================================================================== */
+  21:Core/Src/mcp3208.c **** void MCP3208_Init(void)
+  22:Core/Src/mcp3208.c **** {
+  29              		.loc 1 22 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 2
+
+
+  37              		.cfi_offset 14, -4
+  23:Core/Src/mcp3208.c ****     /* CS sicher auf HIGH setzen → MCP3208 deselektiert */
+  24:Core/Src/mcp3208.c ****     MCP3208_CS_HIGH();
+  38              		.loc 1 24 5 view .LVU1
+  39 0002 0122     		movs	r2, #1
+  40 0004 4021     		movs	r1, #64
+  41 0006 0348     		ldr	r0, .L3
+  42 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  43              	.LVL0:
+  25:Core/Src/mcp3208.c **** 
+  26:Core/Src/mcp3208.c ****     /* Kurze Pause: MCP3208 benötigt nach Power-On min. 1 ms Einschwingzeit    */
+  27:Core/Src/mcp3208.c ****     HAL_Delay(10);
+  44              		.loc 1 27 5 view .LVU2
+  45 000c 0A20     		movs	r0, #10
+  46 000e FFF7FEFF 		bl	HAL_Delay
+  47              	.LVL1:
+  28:Core/Src/mcp3208.c **** }
+  48              		.loc 1 28 1 is_stmt 0 view .LVU3
+  49 0012 08BD     		pop	{r3, pc}
+  50              	.L4:
+  51              		.align	2
+  52              	.L3:
+  53 0014 00040048 		.word	1207960576
+  54              		.cfi_endproc
+  55              	.LFE416:
+  57              		.section	.rodata.MCP3208_ReadRaw.str1.4,"aMS",%progbits,1
+  58              		.align	2
+  59              	.LC0:
+  60 0000 53504920 		.ascii	"SPI rx: %02X %02X %02X\015\012\000"
+  60      72783A20 
+  60      25303258 
+  60      20253032 
+  60      58202530 
+  61              		.section	.text.MCP3208_ReadRaw,"ax",%progbits
+  62              		.align	1
+  63              		.global	MCP3208_ReadRaw
+  64              		.syntax unified
+  65              		.thumb
+  66              		.thumb_func
+  68              	MCP3208_ReadRaw:
+  69              	.LVL2:
+  70              	.LFB417:
+  29:Core/Src/mcp3208.c **** 
+  30:Core/Src/mcp3208.c **** /* ===========================================================================
+  31:Core/Src/mcp3208.c ****  * MCP3208_ReadRaw
+  32:Core/Src/mcp3208.c ****  * ===========================================================================
+  33:Core/Src/mcp3208.c ****  * Führt einen vollständigen 3-Byte SPI-Transfer durch und gibt den 12-bit
+  34:Core/Src/mcp3208.c ****  * Rohwert zurück.
+  35:Core/Src/mcp3208.c ****  *
+  36:Core/Src/mcp3208.c ****  * SPI-Protokoll im Detail (Kanal 0 als Beispiel):
+  37:Core/Src/mcp3208.c ****  *
+  38:Core/Src/mcp3208.c ****  *   tx[0] = 0x06 | (0 >> 2) = 0x06 = 0b00000110
+  39:Core/Src/mcp3208.c ****  *           Bit1 = START-Bit (immer 1)
+  40:Core/Src/mcp3208.c ****  *           Bit0 = SGL/DIFF  (1 = Single-Ended)
+  41:Core/Src/mcp3208.c ****  *           D2   = MSB des Kanals (für Kanal 0..3 = 0, für 4..7 = 1)
+  42:Core/Src/mcp3208.c ****  *
+  43:Core/Src/mcp3208.c ****  *   tx[1] = (0 & 0x03) << 6 = 0x00 = 0b00000000
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 3
+
+
+  44:Core/Src/mcp3208.c ****  *           D1, D0 = restliche Kanal-Bits
+  45:Core/Src/mcp3208.c ****  *
+  46:Core/Src/mcp3208.c ****  *   tx[2] = 0x00 (Dummy-Byte, taktet die Antwort-Bits heraus)
+  47:Core/Src/mcp3208.c ****  *
+  48:Core/Src/mcp3208.c ****  * Antwort in rx[]:
+  49:Core/Src/mcp3208.c ****  *   rx[0]: Dummy (MCP3208 noch nicht bereit)
+  50:Core/Src/mcp3208.c ****  *   rx[1]: Null-Bit + 4 obere Datenbits (B11..B8)
+  51:Core/Src/mcp3208.c ****  *   rx[2]: 8 untere Datenbits (B7..B0)
+  52:Core/Src/mcp3208.c ****  *
+  53:Core/Src/mcp3208.c ****  * Ergebnis: ((rx[1] & 0x0F) << 8) | rx[2]
+  54:Core/Src/mcp3208.c ****  * =========================================================================== */
+  55:Core/Src/mcp3208.c **** uint16_t MCP3208_ReadRaw(uint8_t channel)
+  56:Core/Src/mcp3208.c **** {
+  71              		.loc 1 56 1 is_stmt 1 view -0
+  72              		.cfi_startproc
+  73              		@ args = 0, pretend = 0, frame = 72
+  74              		@ frame_needed = 0, uses_anonymous_args = 0
+  57:Core/Src/mcp3208.c ****     /* ---- Eingabe validieren ---- */
+  58:Core/Src/mcp3208.c ****     if (channel >= MCP3208_NUM_CHANNELS)
+  75              		.loc 1 58 5 view .LVU5
+  76              		.loc 1 58 8 is_stmt 0 view .LVU6
+  77 0000 0728     		cmp	r0, #7
+  78 0002 46D8     		bhi	.L7
+  56:Core/Src/mcp3208.c ****     /* ---- Eingabe validieren ---- */
+  79              		.loc 1 56 1 view .LVU7
+  80 0004 F0B5     		push	{r4, r5, r6, r7, lr}
+  81              	.LCFI1:
+  82              		.cfi_def_cfa_offset 20
+  83              		.cfi_offset 4, -20
+  84              		.cfi_offset 5, -16
+  85              		.cfi_offset 6, -12
+  86              		.cfi_offset 7, -8
+  87              		.cfi_offset 14, -4
+  88 0006 95B0     		sub	sp, sp, #84
+  89              	.LCFI2:
+  90              		.cfi_def_cfa_offset 104
+  59:Core/Src/mcp3208.c ****     {
+  60:Core/Src/mcp3208.c ****         return 0xFFFFU;  /* Fehler: Ungültiger Kanal */
+  61:Core/Src/mcp3208.c ****     }
+  62:Core/Src/mcp3208.c **** 
+  63:Core/Src/mcp3208.c ****     /* ---- TX-Bytes aufbauen ---- */
+  64:Core/Src/mcp3208.c ****     uint8_t tx[3] = {0};
+  91              		.loc 1 64 5 is_stmt 1 view .LVU8
+  92              		.loc 1 64 13 is_stmt 0 view .LVU9
+  93 0008 13AC     		add	r4, sp, #76
+  94 000a 0022     		movs	r2, #0
+  95 000c ADF84C20 		strh	r2, [sp, #76]	@ movhi
+  96 0010 8DF84E20 		strb	r2, [sp, #78]
+  65:Core/Src/mcp3208.c ****     uint8_t rx[3] = {0};
+  97              		.loc 1 65 5 is_stmt 1 view .LVU10
+  98              		.loc 1 65 13 is_stmt 0 view .LVU11
+  99 0014 12AE     		add	r6, sp, #72
+ 100 0016 ADF84820 		strh	r2, [sp, #72]	@ movhi
+ 101 001a 8DF84A20 		strb	r2, [sp, #74]
+  66:Core/Src/mcp3208.c **** 
+  67:Core/Src/mcp3208.c ****     /*
+  68:Core/Src/mcp3208.c ****      * Byte 0: Start-Bit (immer 1) + SGL=1 (Single-Ended) + D2 (Bit 2 des Kanals)
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 4
+
+
+  69:Core/Src/mcp3208.c ****      *   0x06 = 0b00000110
+  70:Core/Src/mcp3208.c ****      *   channel >> 2: extrahiert Bit 2 des Kanals (nur bei Kanal 4..7 = 1)
+  71:Core/Src/mcp3208.c ****      */
+  72:Core/Src/mcp3208.c ****     tx[0] = 0x06U | (channel >> 2U);
+ 102              		.loc 1 72 5 is_stmt 1 view .LVU12
+ 103              		.loc 1 72 11 is_stmt 0 view .LVU13
+ 104 001e 8308     		lsrs	r3, r0, #2
+ 105 0020 43F00603 		orr	r3, r3, #6
+ 106 0024 8DF84C30 		strb	r3, [sp, #76]
+  73:Core/Src/mcp3208.c **** 
+  74:Core/Src/mcp3208.c ****     /*
+  75:Core/Src/mcp3208.c ****      * Byte 1: D1 und D0 (Bits 1..0 des Kanals), in die oberen 2 Bit geschoben
+  76:Core/Src/mcp3208.c ****      *   channel & 0x03: maskiert die unteren 2 Kanal-Bits
+  77:Core/Src/mcp3208.c ****      *   << 6: schiebt sie auf Bitposition 7 und 6
+  78:Core/Src/mcp3208.c ****      */
+  79:Core/Src/mcp3208.c ****     tx[1] = (uint8_t)((channel & 0x03U) << 6U);
+ 107              		.loc 1 79 5 is_stmt 1 view .LVU14
+ 108              		.loc 1 79 13 is_stmt 0 view .LVU15
+ 109 0028 8001     		lsls	r0, r0, #6
+ 110              	.LVL3:
+ 111              		.loc 1 79 11 view .LVU16
+ 112 002a 8DF84D00 		strb	r0, [sp, #77]
+  80:Core/Src/mcp3208.c **** 
+  81:Core/Src/mcp3208.c ****     /*
+  82:Core/Src/mcp3208.c ****      * Byte 2: Dummy → wird nur gesendet, um 8 weitere Taktimpulse zu erzeugen
+  83:Core/Src/mcp3208.c ****      *   (der MCP3208 sendet dabei die unteren 8 Datenbits zurück)
+  84:Core/Src/mcp3208.c ****      */
+  85:Core/Src/mcp3208.c ****     tx[2] = 0x00U;
+ 113              		.loc 1 85 5 is_stmt 1 view .LVU17
+  86:Core/Src/mcp3208.c **** 
+  87:Core/Src/mcp3208.c ****     /* ---- SPI-Transfer ---- */
+  88:Core/Src/mcp3208.c ****     MCP3208_CS_LOW();   /* CS aktiv (LOW) → Kommunikation beginnt            */
+ 114              		.loc 1 88 5 view .LVU18
+ 115 002e 1C4D     		ldr	r5, .L13
+ 116 0030 4021     		movs	r1, #64
+ 117 0032 2846     		mov	r0, r5
+ 118 0034 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 119              	.LVL4:
+  89:Core/Src/mcp3208.c **** 
+  90:Core/Src/mcp3208.c ****     HAL_StatusTypeDef status = HAL_SPI_TransmitReceive(
+ 120              		.loc 1 90 5 view .LVU19
+ 121              		.loc 1 90 32 is_stmt 0 view .LVU20
+ 122 0038 6427     		movs	r7, #100
+ 123 003a 0097     		str	r7, [sp]
+ 124 003c 0323     		movs	r3, #3
+ 125 003e 3246     		mov	r2, r6
+ 126 0040 2146     		mov	r1, r4
+ 127 0042 1848     		ldr	r0, .L13+4
+ 128 0044 FFF7FEFF 		bl	HAL_SPI_TransmitReceive
+ 129              	.LVL5:
+ 130 0048 0446     		mov	r4, r0
+ 131              	.LVL6:
+  91:Core/Src/mcp3208.c ****         &hspi1,         /* SPI-Handle (von CubeMX in spi.c konfiguriert)     */
+  92:Core/Src/mcp3208.c ****         tx,             /* Sendepuffer                                        */
+  93:Core/Src/mcp3208.c ****         rx,             /* Empfangspuffer                                     */
+  94:Core/Src/mcp3208.c ****         3U,             /* 3 Bytes übertragen                                 */
+  95:Core/Src/mcp3208.c ****         100U            /* Timeout in ms                                      */
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 5
+
+
+  96:Core/Src/mcp3208.c ****     );
+  97:Core/Src/mcp3208.c **** 
+  98:Core/Src/mcp3208.c ****     /* nach HAL_SPI_TransmitReceive(...) und vor MCP3208_CS_HIGH() */
+  99:Core/Src/mcp3208.c ****     extern UART_HandleTypeDef huart2;
+ 132              		.loc 1 99 5 is_stmt 1 view .LVU21
+ 100:Core/Src/mcp3208.c ****     char dbg[64];
+ 133              		.loc 1 100 5 view .LVU22
+ 101:Core/Src/mcp3208.c ****     int n = snprintf(dbg, sizeof(dbg), 
+ 134              		.loc 1 101 5 view .LVU23
+ 102:Core/Src/mcp3208.c ****     "SPI rx: %02X %02X %02X\r\n", rx[0], rx[1], rx[2]);
+ 135              		.loc 1 102 44 is_stmt 0 view .LVU24
+ 136 004a 9DF84930 		ldrb	r3, [sp, #73]	@ zero_extendqisi2
+ 137              		.loc 1 102 51 view .LVU25
+ 138 004e 9DF84A20 		ldrb	r2, [sp, #74]	@ zero_extendqisi2
+ 101:Core/Src/mcp3208.c ****     int n = snprintf(dbg, sizeof(dbg), 
+ 139              		.loc 1 101 13 view .LVU26
+ 140 0052 02AE     		add	r6, sp, #8
+ 141 0054 0192     		str	r2, [sp, #4]
+ 142 0056 0093     		str	r3, [sp]
+ 143 0058 9DF84830 		ldrb	r3, [sp, #72]	@ zero_extendqisi2
+ 144 005c 124A     		ldr	r2, .L13+8
+ 145 005e 4021     		movs	r1, #64
+ 146 0060 3046     		mov	r0, r6
+ 147 0062 FFF7FEFF 		bl	snprintf
+ 148              	.LVL7:
+ 103:Core/Src/mcp3208.c ****     HAL_UART_Transmit(&huart2, (uint8_t*)dbg, n, 100);
+ 149              		.loc 1 103 5 is_stmt 1 view .LVU27
+ 150 0066 3B46     		mov	r3, r7
+ 151 0068 1222     		movs	r2, #18
+ 152 006a 3146     		mov	r1, r6
+ 153 006c 0F48     		ldr	r0, .L13+12
+ 154 006e FFF7FEFF 		bl	HAL_UART_Transmit
+ 155              	.LVL8:
+ 104:Core/Src/mcp3208.c ****     MCP3208_CS_HIGH();  /* CS inaktiv (HIGH) → Kommunikation beendet         */
+ 156              		.loc 1 104 5 view .LVU28
+ 157 0072 0122     		movs	r2, #1
+ 158 0074 4021     		movs	r1, #64
+ 159 0076 2846     		mov	r0, r5
+ 160 0078 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 161              	.LVL9:
+ 105:Core/Src/mcp3208.c **** 
+ 106:Core/Src/mcp3208.c ****     /* ---- Fehlerbehandlung ---- */
+ 107:Core/Src/mcp3208.c ****     if (status != HAL_OK)
+ 162              		.loc 1 107 5 view .LVU29
+ 163              		.loc 1 107 8 is_stmt 0 view .LVU30
+ 164 007c 64B9     		cbnz	r4, .L8
+ 108:Core/Src/mcp3208.c ****     {
+ 109:Core/Src/mcp3208.c ****         return 0xFFFFU;
+ 110:Core/Src/mcp3208.c ****     }
+ 111:Core/Src/mcp3208.c **** 
+ 112:Core/Src/mcp3208.c ****     /* ---- 12-bit Ergebnis zusammensetzen ---- */
+ 113:Core/Src/mcp3208.c ****     /*
+ 114:Core/Src/mcp3208.c ****      * rx[1] enthält 4 obere Datenbits an Positionen 3..0 (Bits 11..8).
+ 115:Core/Src/mcp3208.c ****      *   (rx[1] & 0x0F) maskiert nur diese 4 Bits
+ 116:Core/Src/mcp3208.c ****      *   << 8: schiebt sie an die richtige Position
+ 117:Core/Src/mcp3208.c ****      * rx[2] enthält die 8 unteren Datenbits (Bits 7..0) direkt.
+ 118:Core/Src/mcp3208.c ****      */
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 6
+
+
+ 119:Core/Src/mcp3208.c ****     return (uint16_t)(((uint16_t)(rx[1] & 0x0FU) << 8U) | (uint16_t)rx[2]);
+ 165              		.loc 1 119 5 is_stmt 1 view .LVU31
+ 166              		.loc 1 119 37 is_stmt 0 view .LVU32
+ 167 007e 9DF84930 		ldrb	r3, [sp, #73]	@ zero_extendqisi2
+ 168              		.loc 1 119 71 view .LVU33
+ 169 0082 9DF84A00 		ldrb	r0, [sp, #74]	@ zero_extendqisi2
+ 170              		.loc 1 119 57 view .LVU34
+ 171 0086 1B02     		lsls	r3, r3, #8
+ 172 0088 03F47063 		and	r3, r3, #3840
+ 173              		.loc 1 119 12 view .LVU35
+ 174 008c 1843     		orrs	r0, r0, r3
+ 175              	.L6:
+ 120:Core/Src/mcp3208.c **** }
+ 176              		.loc 1 120 1 view .LVU36
+ 177 008e 15B0     		add	sp, sp, #84
+ 178              	.LCFI3:
+ 179              		.cfi_def_cfa_offset 20
+ 180              		@ sp needed
+ 181 0090 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 182              	.LVL10:
+ 183              	.L7:
+ 184              	.LCFI4:
+ 185              		.cfi_def_cfa_offset 0
+ 186              		.cfi_restore 4
+ 187              		.cfi_restore 5
+ 188              		.cfi_restore 6
+ 189              		.cfi_restore 7
+ 190              		.cfi_restore 14
+  60:Core/Src/mcp3208.c ****     }
+ 191              		.loc 1 60 16 view .LVU37
+ 192 0092 4FF6FF70 		movw	r0, #65535
+ 193              	.LVL11:
+ 194              		.loc 1 120 1 view .LVU38
+ 195 0096 7047     		bx	lr
+ 196              	.LVL12:
+ 197              	.L8:
+ 198              	.LCFI5:
+ 199              		.cfi_def_cfa_offset 104
+ 200              		.cfi_offset 4, -20
+ 201              		.cfi_offset 5, -16
+ 202              		.cfi_offset 6, -12
+ 203              		.cfi_offset 7, -8
+ 204              		.cfi_offset 14, -4
+ 109:Core/Src/mcp3208.c ****     }
+ 205              		.loc 1 109 16 view .LVU39
+ 206 0098 4FF6FF70 		movw	r0, #65535
+ 207 009c F7E7     		b	.L6
+ 208              	.L14:
+ 209 009e 00BF     		.align	2
+ 210              	.L13:
+ 211 00a0 00040048 		.word	1207960576
+ 212 00a4 00000000 		.word	hspi1
+ 213 00a8 00000000 		.word	.LC0
+ 214 00ac 00000000 		.word	huart2
+ 215              		.cfi_endproc
+ 216              	.LFE417:
+ 218              		.section	.text.MCP3208_ReadVoltage,"ax",%progbits
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 7
+
+
+ 219              		.align	1
+ 220              		.global	MCP3208_ReadVoltage
+ 221              		.syntax unified
+ 222              		.thumb
+ 223              		.thumb_func
+ 225              	MCP3208_ReadVoltage:
+ 226              	.LVL13:
+ 227              	.LFB418:
+ 121:Core/Src/mcp3208.c **** 
+ 122:Core/Src/mcp3208.c **** /* ===========================================================================
+ 123:Core/Src/mcp3208.c ****  * MCP3208_ReadVoltage
+ 124:Core/Src/mcp3208.c ****  * ===========================================================================
+ 125:Core/Src/mcp3208.c ****  * Wrapper um MCP3208_ReadRaw() mit automatischer Spannungsumrechnung.
+ 126:Core/Src/mcp3208.c ****  *
+ 127:Core/Src/mcp3208.c ****  * Formel: U [V] = Rohwert × (VREF / 4095)
+ 128:Core/Src/mcp3208.c ****  *   Beispiel: Rohwert = 2047 → 2047 × (3.3 / 4095) ≈ 1.648 V
+ 129:Core/Src/mcp3208.c ****  * =========================================================================== */
+ 130:Core/Src/mcp3208.c **** MCP3208_Status_t MCP3208_ReadVoltage(uint8_t channel, MCP3208_Result_t *result)
+ 131:Core/Src/mcp3208.c **** {
+ 228              		.loc 1 131 1 is_stmt 1 view -0
+ 229              		.cfi_startproc
+ 230              		@ args = 0, pretend = 0, frame = 0
+ 231              		@ frame_needed = 0, uses_anonymous_args = 0
+ 132:Core/Src/mcp3208.c ****     if (result == NULL)
+ 232              		.loc 1 132 5 view .LVU41
+ 233              		.loc 1 132 8 is_stmt 0 view .LVU42
+ 234 0000 D1B1     		cbz	r1, .L18
+ 131:Core/Src/mcp3208.c ****     if (result == NULL)
+ 235              		.loc 1 131 1 view .LVU43
+ 236 0002 10B5     		push	{r4, lr}
+ 237              	.LCFI6:
+ 238              		.cfi_def_cfa_offset 8
+ 239              		.cfi_offset 4, -8
+ 240              		.cfi_offset 14, -4
+ 241 0004 0C46     		mov	r4, r1
+ 133:Core/Src/mcp3208.c ****     {
+ 134:Core/Src/mcp3208.c ****         return MCP3208_ERROR;
+ 135:Core/Src/mcp3208.c ****     }
+ 136:Core/Src/mcp3208.c **** 
+ 137:Core/Src/mcp3208.c ****     uint16_t raw = MCP3208_ReadRaw(channel);
+ 242              		.loc 1 137 5 is_stmt 1 view .LVU44
+ 243              		.loc 1 137 20 is_stmt 0 view .LVU45
+ 244 0006 FFF7FEFF 		bl	MCP3208_ReadRaw
+ 245              	.LVL14:
+ 138:Core/Src/mcp3208.c **** 
+ 139:Core/Src/mcp3208.c ****     if (raw == 0xFFFFU)
+ 246              		.loc 1 139 5 is_stmt 1 view .LVU46
+ 247              		.loc 1 139 8 is_stmt 0 view .LVU47
+ 248 000a 4FF6FF73 		movw	r3, #65535
+ 249 000e 9842     		cmp	r0, r3
+ 250 0010 0CD0     		beq	.L23
+ 140:Core/Src/mcp3208.c ****     {
+ 141:Core/Src/mcp3208.c ****         result->raw     = 0U;
+ 142:Core/Src/mcp3208.c ****         result->voltage = 0.0f;
+ 143:Core/Src/mcp3208.c ****         return MCP3208_ERROR;
+ 144:Core/Src/mcp3208.c ****     }
+ 145:Core/Src/mcp3208.c **** 
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 8
+
+
+ 146:Core/Src/mcp3208.c ****     result->raw     = raw;
+ 251              		.loc 1 146 5 is_stmt 1 view .LVU48
+ 252              		.loc 1 146 21 is_stmt 0 view .LVU49
+ 253 0012 2080     		strh	r0, [r4]	@ movhi
+ 147:Core/Src/mcp3208.c ****     result->voltage = (float)raw * (MCP3208_VREF_V / (float)MCP3208_MAX_VALUE);
+ 254              		.loc 1 147 5 is_stmt 1 view .LVU50
+ 255              		.loc 1 147 23 is_stmt 0 view .LVU51
+ 256 0014 07EE900A 		vmov	s15, r0	@ int
+ 257 0018 F8EE677A 		vcvt.f32.u32	s15, s15
+ 258              		.loc 1 147 34 view .LVU52
+ 259 001c 9FED077A 		vldr.32	s14, .L24
+ 260 0020 67EE877A 		vmul.f32	s15, s15, s14
+ 261              		.loc 1 147 21 view .LVU53
+ 262 0024 C4ED017A 		vstr.32	s15, [r4, #4]
+ 148:Core/Src/mcp3208.c **** 
+ 149:Core/Src/mcp3208.c ****     return MCP3208_OK;
+ 263              		.loc 1 149 5 is_stmt 1 view .LVU54
+ 264              		.loc 1 149 12 is_stmt 0 view .LVU55
+ 265 0028 0020     		movs	r0, #0
+ 266              	.LVL15:
+ 267              	.L16:
+ 150:Core/Src/mcp3208.c **** }
+ 268              		.loc 1 150 1 view .LVU56
+ 269 002a 10BD     		pop	{r4, pc}
+ 270              	.LVL16:
+ 271              	.L23:
+ 141:Core/Src/mcp3208.c ****         result->voltage = 0.0f;
+ 272              		.loc 1 141 9 is_stmt 1 view .LVU57
+ 141:Core/Src/mcp3208.c ****         result->voltage = 0.0f;
+ 273              		.loc 1 141 25 is_stmt 0 view .LVU58
+ 274 002c 0023     		movs	r3, #0
+ 275 002e 2380     		strh	r3, [r4]	@ movhi
+ 142:Core/Src/mcp3208.c ****         return MCP3208_ERROR;
+ 276              		.loc 1 142 9 is_stmt 1 view .LVU59
+ 142:Core/Src/mcp3208.c ****         return MCP3208_ERROR;
+ 277              		.loc 1 142 25 is_stmt 0 view .LVU60
+ 278 0030 0023     		movs	r3, #0
+ 279 0032 6360     		str	r3, [r4, #4]	@ float
+ 143:Core/Src/mcp3208.c ****     }
+ 280              		.loc 1 143 9 is_stmt 1 view .LVU61
+ 143:Core/Src/mcp3208.c ****     }
+ 281              		.loc 1 143 16 is_stmt 0 view .LVU62
+ 282 0034 0120     		movs	r0, #1
+ 283              	.LVL17:
+ 143:Core/Src/mcp3208.c ****     }
+ 284              		.loc 1 143 16 view .LVU63
+ 285 0036 F8E7     		b	.L16
+ 286              	.LVL18:
+ 287              	.L18:
+ 288              	.LCFI7:
+ 289              		.cfi_def_cfa_offset 0
+ 290              		.cfi_restore 4
+ 291              		.cfi_restore 14
+ 134:Core/Src/mcp3208.c ****     }
+ 292              		.loc 1 134 16 view .LVU64
+ 293 0038 0120     		movs	r0, #1
+ 294              	.LVL19:
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 9
+
+
+ 295              		.loc 1 150 1 view .LVU65
+ 296 003a 7047     		bx	lr
+ 297              	.L25:
+ 298              		.align	2
+ 299              	.L24:
+ 300 003c 6740533A 		.word	978534503
+ 301              		.cfi_endproc
+ 302              	.LFE418:
+ 304              		.section	.text.MCP3208_ReadAllChannels,"ax",%progbits
+ 305              		.align	1
+ 306              		.global	MCP3208_ReadAllChannels
+ 307              		.syntax unified
+ 308              		.thumb
+ 309              		.thumb_func
+ 311              	MCP3208_ReadAllChannels:
+ 312              	.LVL20:
+ 313              	.LFB419:
+ 151:Core/Src/mcp3208.c **** 
+ 152:Core/Src/mcp3208.c **** /* ===========================================================================
+ 153:Core/Src/mcp3208.c ****  * MCP3208_ReadAllChannels
+ 154:Core/Src/mcp3208.c ****  * ===========================================================================
+ 155:Core/Src/mcp3208.c ****  * Liest alle 8 Kanäle nacheinander (CH0 → CH7).
+ 156:Core/Src/mcp3208.c ****  * Nützlich für Datenlogger-Anwendungen (vgl. Erweiterungsideen im Experiment).
+ 157:Core/Src/mcp3208.c ****  * =========================================================================== */
+ 158:Core/Src/mcp3208.c **** MCP3208_Status_t MCP3208_ReadAllChannels(MCP3208_Result_t results[MCP3208_NUM_CHANNELS])
+ 159:Core/Src/mcp3208.c **** {
+ 314              		.loc 1 159 1 is_stmt 1 view -0
+ 315              		.cfi_startproc
+ 316              		@ args = 0, pretend = 0, frame = 0
+ 317              		@ frame_needed = 0, uses_anonymous_args = 0
+ 318              		.loc 1 159 1 is_stmt 0 view .LVU67
+ 319 0000 70B5     		push	{r4, r5, r6, lr}
+ 320              	.LCFI8:
+ 321              		.cfi_def_cfa_offset 16
+ 322              		.cfi_offset 4, -16
+ 323              		.cfi_offset 5, -12
+ 324              		.cfi_offset 6, -8
+ 325              		.cfi_offset 14, -4
+ 160:Core/Src/mcp3208.c ****     if (results == NULL)
+ 326              		.loc 1 160 5 is_stmt 1 view .LVU68
+ 327              		.loc 1 160 8 is_stmt 0 view .LVU69
+ 328 0002 80B1     		cbz	r0, .L31
+ 329 0004 0546     		mov	r5, r0
+ 330              	.LBB2:
+ 161:Core/Src/mcp3208.c ****     {
+ 162:Core/Src/mcp3208.c ****         return MCP3208_ERROR;
+ 163:Core/Src/mcp3208.c ****     }
+ 164:Core/Src/mcp3208.c **** 
+ 165:Core/Src/mcp3208.c ****     MCP3208_Status_t overall = MCP3208_OK;
+ 166:Core/Src/mcp3208.c **** 
+ 167:Core/Src/mcp3208.c ****     for (uint8_t ch = 0U; ch < MCP3208_NUM_CHANNELS; ch++)
+ 331              		.loc 1 167 18 view .LVU70
+ 332 0006 0024     		movs	r4, #0
+ 333              	.LBE2:
+ 165:Core/Src/mcp3208.c **** 
+ 334              		.loc 1 165 22 view .LVU71
+ 335 0008 2646     		mov	r6, r4
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 10
+
+
+ 336 000a 01E0     		b	.L28
+ 337              	.LVL21:
+ 338              	.L29:
+ 339              	.LBB3:
+ 340              		.loc 1 167 56 is_stmt 1 discriminator 2 view .LVU72
+ 341 000c 0134     		adds	r4, r4, #1
+ 342              	.LVL22:
+ 343              		.loc 1 167 56 is_stmt 0 discriminator 2 view .LVU73
+ 344 000e E4B2     		uxtb	r4, r4
+ 345              	.LVL23:
+ 346              	.L28:
+ 347              		.loc 1 167 30 is_stmt 1 discriminator 1 view .LVU74
+ 348 0010 072C     		cmp	r4, #7
+ 349 0012 09D8     		bhi	.L27
+ 168:Core/Src/mcp3208.c ****     {
+ 169:Core/Src/mcp3208.c ****         if (MCP3208_ReadVoltage(ch, &results[ch]) != MCP3208_OK)
+ 350              		.loc 1 169 9 view .LVU75
+ 351              		.loc 1 169 13 is_stmt 0 view .LVU76
+ 352 0014 05EBC401 		add	r1, r5, r4, lsl #3
+ 353 0018 2046     		mov	r0, r4
+ 354 001a FFF7FEFF 		bl	MCP3208_ReadVoltage
+ 355              	.LVL24:
+ 356              		.loc 1 169 12 discriminator 1 view .LVU77
+ 357 001e 0028     		cmp	r0, #0
+ 358 0020 F4D0     		beq	.L29
+ 170:Core/Src/mcp3208.c ****         {
+ 171:Core/Src/mcp3208.c ****             overall = MCP3208_ERROR;
+ 359              		.loc 1 171 21 view .LVU78
+ 360 0022 0126     		movs	r6, #1
+ 361              	.LVL25:
+ 362              		.loc 1 171 21 view .LVU79
+ 363 0024 F2E7     		b	.L29
+ 364              	.LVL26:
+ 365              	.L31:
+ 366              		.loc 1 171 21 view .LVU80
+ 367              	.LBE3:
+ 162:Core/Src/mcp3208.c ****     }
+ 368              		.loc 1 162 16 view .LVU81
+ 369 0026 0126     		movs	r6, #1
+ 370              	.LVL27:
+ 371              	.L27:
+ 172:Core/Src/mcp3208.c ****         }
+ 173:Core/Src/mcp3208.c ****     }
+ 174:Core/Src/mcp3208.c **** 
+ 175:Core/Src/mcp3208.c ****     return overall;
+ 176:Core/Src/mcp3208.c **** }
+ 372              		.loc 1 176 1 view .LVU82
+ 373 0028 3046     		mov	r0, r6
+ 374 002a 70BD     		pop	{r4, r5, r6, pc}
+ 375              		.cfi_endproc
+ 376              	.LFE419:
+ 378              		.text
+ 379              	.Letext0:
+ 380              		.file 2 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.2 rel1/arm-none-eabi/include/ma
+ 381              		.file 3 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.2 rel1/arm-none-eabi/include/sy
+ 382              		.file 4 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l476xx.h"
+ 383              		.file 5 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 11
+
+
+ 384              		.file 6 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.h"
+ 385              		.file 7 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
+ 386              		.file 8 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h"
+ 387              		.file 9 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h"
+ 388              		.file 10 "Core/Inc/mcp3208.h"
+ 389              		.file 11 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.2 rel1/arm-none-eabi/include/s
+ 390              		.file 12 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h"
+ 391              		.file 13 "Core/Inc/spi.h"
+ 392              		.file 14 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_dma.h"
+ARM GAS  C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mcp3208.c
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:21     .text.MCP3208_Init:00000000 $t
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:27     .text.MCP3208_Init:00000000 MCP3208_Init
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:53     .text.MCP3208_Init:00000014 $d
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:58     .rodata.MCP3208_ReadRaw.str1.4:00000000 $d
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:62     .text.MCP3208_ReadRaw:00000000 $t
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:68     .text.MCP3208_ReadRaw:00000000 MCP3208_ReadRaw
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:211    .text.MCP3208_ReadRaw:000000a0 $d
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:219    .text.MCP3208_ReadVoltage:00000000 $t
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:225    .text.MCP3208_ReadVoltage:00000000 MCP3208_ReadVoltage
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:300    .text.MCP3208_ReadVoltage:0000003c $d
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:305    .text.MCP3208_ReadAllChannels:00000000 $t
+C:\Users\ChipTec\AppData\Local\Temp\ccdjoKgV.s:311    .text.MCP3208_ReadAllChannels:00000000 MCP3208_ReadAllChannels
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_Delay
+HAL_SPI_TransmitReceive
+snprintf
+HAL_UART_Transmit
+hspi1
+huart2
