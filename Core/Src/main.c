@@ -6,8 +6,8 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright Djamila Boethfueer Boucetta.
-  * All rights reserved.
+  * Copyright Diplom Ingenieurin Djamila Boethfueer Boucetta.
+  * All rights reserved...............
   *
   ******************************************************************************
   */
